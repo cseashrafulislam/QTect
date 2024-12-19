@@ -1,0 +1,33 @@
+﻿@model QTect.Models.Employee
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h1>Employee Details</h1>
+
+<div>
+    <h4>Employee</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Name:</dt>
+        <dd>@Model.Name</dd>
+        <dt>Email:</dt>
+        <dd>@Model.Email</dd>
+        <dt>Phone:</dt>
+        <dd>@Model.Phone</dd>
+        <dt>Position:</dt>
+        <dd>@Model.Position</dd>
+        <dt>Join Date:</dt>
+        <dd>@Model.JoinDate.ToString("d")</dd>
+        <dt>Status:</dt>
+        <dd>@Model.Status</dd>
+        <dt>Department:</dt>
+        <dd>@Model.Department?.DepartmentName</dd>
+    </dl>
+</div>
+
+<p>
+    <a href="@Url.Action("Edit", new { id = Model.ID })">Edit</a> |
+    <a href="@Url.Action("Index")">Back to List</a>
+</p>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<QTect.Models.Employee>
+
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<h1>Employees</h1>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Position</th>
+            <th>Join Date</th>
+            <th>Department</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <td>@item.Phone</td>
+                <td>@item.Position</td>
+                <td>@item.JoinDate.ToString("d")</td>
+                <td>@item.Department?.DepartmentName</td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = item.ID })">Details</a> |
+                    <a href="@Url.Action("Edit", new { id = item.ID })">Edit</a> |
+                    <a href="@Url.Action("Delete", new { id = item.ID })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
