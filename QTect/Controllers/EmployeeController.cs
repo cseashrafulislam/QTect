@@ -21,6 +21,51 @@ namespace QTect.Controllers
             var employees = await _context.Employees.Include(e => e.Department).Where(a=> a.Deleted).ToListAsync();
             return View(employees);
         }
+        public async Task<IActionResult> Search(string searchName, int? departmentId, string position, int? minScore, int? maxScore, int page = 1, int pageSize = 10)
+        {
+            {
+                var query = _context.Employees
+                    .Include(e => e.PerformanceReviews).Where(a=> a.Deleted)
+                    .AsQueryable();
+
+                if (!string.IsNullOrEmpty(searchName))
+                {
+                    query = query.Where(e => e.Name.Contains(searchName));
+                }
+
+                if (departmentId.HasValue)
+                {
+                    query = query.Where(e => e.DepartmentID == departmentId);
+                }
+
+                if (!string.IsNullOrEmpty(position))
+                {
+                    query = query.Where(e => e.Position.Contains(position));
+                }
+
+                if (minScore.HasValue)
+                {
+                    query = query.Where(e => e.PerformanceReviews.Any(pr => pr.ReviewScore >= minScore));
+                }
+                if (maxScore.HasValue)
+                {
+                    query = query.Where(e => e.PerformanceReviews.Any(pr => pr.ReviewScore <= maxScore));
+                }
+
+                var employees = await query
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                var totalCount = await query.CountAsync();
+
+                ViewBag.TotalCount = totalCount;
+                ViewBag.PageSize = pageSize;
+                ViewBag.CurrentPage = page;
+                ViewBag.Departments = new SelectList(_context.Departments, "ID", "DepartmentName");
+                return View(employees);
+            }
+        }
 
         // GET: Employee/Details/5
         public async Task<IActionResult> Details(int? id)

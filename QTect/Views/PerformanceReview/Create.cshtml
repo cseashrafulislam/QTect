@@ -1,0 +1,33 @@
+﻿@model QTect.Models.PerformanceReview
+
+<h2>Create Performance Review</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="EmployeeID" class="control-label"></label>
+        <select asp-for="EmployeeID" class="form-control" asp-items="ViewBag.Employees">
+            <option value="">--Select Employee--</option>
+        </select>
+        <span asp-validation-for="EmployeeID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReviewDate" class="control-label"></label>
+        <input asp-for="ReviewDate" class="form-control" type="date" />
+        <span asp-validation-for="ReviewDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReviewScore" class="control-label"></label>
+        <input asp-for="ReviewScore" class="form-control" type="number" min="1" max="10" />
+        <span asp-validation-for="ReviewScore" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReviewNotes" class="control-label"></label>
+        <textarea asp-for="ReviewNotes" class="form-control"></textarea>
+        <span asp-validation-for="ReviewNotes" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Review</button>
+</form>

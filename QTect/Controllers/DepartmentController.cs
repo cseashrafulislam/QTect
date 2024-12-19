@@ -44,7 +44,6 @@ namespace QTect.Controllers
         // GET: Department/Create
         public IActionResult Create()
         {
-            // Populate ViewBag.Employees with a list of employees
             ViewBag.Employees = new SelectList(_context.Employees, "ID", "Name");
             return View();
         }
@@ -90,14 +89,13 @@ namespace QTect.Controllers
         {
             if (id != department.ID)
             {
-                return BadRequest(); // Ensure the ID matches the route parameter
+                return BadRequest(); 
             }
             ModelState.Remove("Manager");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Attach the entity to the context and mark it as modified
                     _context.Entry(department).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
@@ -105,7 +103,7 @@ namespace QTect.Controllers
                 {
                     if (!DepartmentExists(department.ID))
                     {
-                        return NotFound(); // Department doesn't exist
+                        return NotFound(); 
                     }
                     else
                     {
@@ -113,12 +111,11 @@ namespace QTect.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index)); // Redirect to index after successful update
+                return RedirectToAction(nameof(Index));
             }
 
-            // Repopulate ViewBag.Employees to re-render the form
             ViewBag.Employees = new SelectList(_context.Employees, "ID", "Name", department.ManagerID);
-            return View(department); // Return view with validation messages
+            return View(department); 
         }
 
 
@@ -131,7 +128,7 @@ namespace QTect.Controllers
             }
 
             var department = await _context.Departments
-                .Include(d => d.Manager) // Include Manager for more details (if applicable)
+                .Include(d => d.Manager)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (department == null)

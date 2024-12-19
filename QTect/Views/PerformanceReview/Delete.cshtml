@@ -1,0 +1,16 @@
+﻿@model QTect.Models.PerformanceReview
+
+<h2>Delete Performance Review</h2>
+
+<div class="alert alert-warning">
+    <h3>
+        Are you sure you want to delete the Review For Employee <strong>@Model.Employee.Name</strong>?
+    </h3>
+    <p>This action cannot be undone.</p>
+</div>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ID" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
