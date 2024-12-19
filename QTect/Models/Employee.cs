@@ -11,6 +11,7 @@
         public DateTime JoinDate { get; set; }
         public int DepartmentID { get; set; }
         public string Status { get; set; } = "Active";
+        public bool Deleted { get; set; } = true;
         public virtual Department Department { get; set; }
         public virtual ICollection<PerformanceReview> PerformanceReviews { get; set; }
         public virtual ICollection<Department> ManagedDepartments { get; set; }

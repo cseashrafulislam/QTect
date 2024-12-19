@@ -12,8 +12,8 @@ using QTect.Db;
 namespace QTect.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241219044909_CreateTables")]
-    partial class CreateTables
+    [Migration("20241219145711_CreateaLLTable")]
+    partial class CreateaLLTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,9 @@ namespace QTect.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("DepartmentID")
                         .HasColumnType("int");

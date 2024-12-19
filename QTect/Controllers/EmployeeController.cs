@@ -18,7 +18,7 @@ namespace QTect.Controllers
         // GET: Employee
         public async Task<IActionResult> Index()
         {
-            var employees = await _context.Employees.Include(e => e.Department).ToListAsync();
+            var employees = await _context.Employees.Include(e => e.Department).Where(a=> a.Deleted).ToListAsync();
             return View(employees);
         }
 
@@ -32,7 +32,7 @@ namespace QTect.Controllers
 
             var employee = await _context.Employees
                 .Include(e => e.Department)
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.ID == id && m.Deleted);
             if (employee == null)
             {
                 return NotFound();
@@ -88,37 +88,46 @@ namespace QTect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("EmployeeID,Name,Email,Phone,Position,JoinDate,Status,DepartmentID")] Employee employee)
         {
-            if (id != employee.ID)
-            {
-                return NotFound();
-            }
-
+       
+            ModelState.Remove("Department");
+            ModelState.Remove("ManagedDepartments");
+            ModelState.Remove("PerformanceReviews");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(employee);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmployeeExists(employee.ID))
+                    var entity = await _context.Employees.FindAsync(id);
+
+                    if (entity == null)
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    entity.Name = employee.Name;
+                    entity.Email = employee.Email;
+                    entity.Phone = employee.Phone;
+                    entity.Position = employee.Position;
+                    entity.JoinDate = employee.JoinDate;
+                    entity.DepartmentID = employee.DepartmentID;
+                    entity.Status = employee.Status;
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             var departments = _context.Departments.Select(d => new SelectListItem { Value = d.ID.ToString(), Text = d.DepartmentName }).ToList();
             ViewData["DID"] = departments;
-
-            //ViewData["DID"] = new SelectList(_context.Departments, "ID", "DepartmentName", employee.DepartmentID);
             return View(employee);
         }
+
 
         // GET: Employee/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -129,8 +138,9 @@ namespace QTect.Controllers
             }
 
             var employee = await _context.Employees
-                .Include(e => e.Department)
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .Include(d => d.Department)
+                .FirstOrDefaultAsync(m => m.ID == id && m.Deleted);
+
             if (employee == null)
             {
                 return NotFound();
@@ -139,13 +149,20 @@ namespace QTect.Controllers
             return View(employee);
         }
 
-        // POST: Employee/Delete/5
-        [HttpPost, ActionName("Delete")]
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            _context.Employees.Remove(employee);
+            var entity = await _context.Employees.FindAsync(id);
+
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            entity.Status = "DeActive";
+            entity.Deleted = false;
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

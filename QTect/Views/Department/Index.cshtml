@@ -22,7 +22,7 @@
             {
                 <tr>
                     <td>@department.DepartmentName</td>
-                    <td>@department.Manager?.Name ?? "No Manager"</td>
+                    <td>@department.Manager?.Name</td>
                     <td>@department.Budget</td> 
                     <td>
                         <a asp-action="Edit" asp-route-id="@department.ID" class="btn btn-sm btn-primary">Edit</a>

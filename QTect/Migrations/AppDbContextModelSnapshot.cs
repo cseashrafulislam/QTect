@@ -55,6 +55,9 @@ namespace QTect.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("DepartmentID")
                         .HasColumnType("int");
 
