@@ -53,6 +53,9 @@ namespace QTect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeID,Name,Email,Phone,Position,JoinDate,Status,DepartmentID")] Employee employee)
         {
+            ModelState.Remove("Department");
+            ModelState.Remove("ManagedDepartments");
+            ModelState.Remove("PerformanceReviews");
             if (ModelState.IsValid)
             {
                 _context.Add(employee);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QTect.Db;
 using QTect.Models;
@@ -18,7 +19,7 @@ namespace QTect.Controllers
         public async Task<IActionResult> Index()
         {
             var departments = await _context.Departments
-                .Include(d => d.Manager) // If you want to include the manager information
+                .Include(d => d.Manager) 
                 .ToListAsync();
             return View(departments);
         }
@@ -26,6 +27,8 @@ namespace QTect.Controllers
         // GET: Department/Create
         public IActionResult Create()
         {
+            // Populate ViewBag.Employees with a list of employees
+            ViewBag.Employees = new SelectList(_context.Employees, "ID", "Name");
             return View();
         }
 
@@ -34,12 +37,17 @@ namespace QTect.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DepartmentName, ManagerID, Budget")] Department department)
         {
+            ModelState.Remove("Manager");
             if (ModelState.IsValid)
             {
+                // Add the new department to the database
                 _context.Add(department);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // If the model state is invalid, re-populate ViewBag.Employees and return the view
+            ViewBag.Employees = new SelectList(_context.Employees, "Id", "Name", department.ManagerID);
             return View(department);
         }
 

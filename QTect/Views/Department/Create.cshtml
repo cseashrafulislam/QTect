@@ -11,12 +11,8 @@
 
     <div class="form-group">
         <label asp-for="ManagerID" class="control-label"></label>
-        <select asp-for="ManagerID" class="form-control">
+        <select asp-for="ManagerID" class="form-control" asp-items="ViewBag.Employees">
             <option value="">--Select Manager--</option>
-            @foreach (var employee in ViewBag.Employees as List<QTect.Models.Employee>)
-            {
-                <option value="@employee.ID">@employee.Name</option>
-            }
         </select>
         <span asp-validation-for="ManagerID" class="text-danger"></span>
     </div>

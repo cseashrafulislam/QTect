@@ -1,5 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<QTect.Models.Department>
+
 @{
+    ViewData["Title"] = "Departments List";
 }
+
+<h2>Departments</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Department Name</th>
+            <th>Manager</th>
+            <th>Budget</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var department in Model)
+            {
+                <tr>
+                    <td>@department.DepartmentName</td>
+                    <td>@department.Manager?.Name ?? "No Manager"</td>
+                    <td>@department.Budget</td> 
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@department.ID" class="btn btn-sm btn-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@department.ID" class="btn btn-sm btn-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@department.ID" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No departments available</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-success">Add New Department</a>
