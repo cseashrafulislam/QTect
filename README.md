@@ -12,3 +12,8 @@
 ![Performance](https://github.com/user-attachments/assets/9beb426b-60a8-4033-b05b-b315f3b512a3)
 #Employes Search
 ![Employee Search](https://github.com/user-attachments/assets/80c61fae-3dd2-491f-ade8-b830496dcbe8)
+
+#AveragePerformanceScore
+![AveragePerformanceScore](https://github.com/user-attachments/assets/90895f89-99b0-4a26-a103-894a10ce20fc)
+
+
